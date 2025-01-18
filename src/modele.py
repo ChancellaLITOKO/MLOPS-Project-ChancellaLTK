@@ -94,6 +94,7 @@ def train_gradient_boosting(X_train, X_test, y_train, y_test):
 
 if __name__ == "__main__":
     # Configurer MLflow
+    mlflow.set_tracking_uri("http://127.0.0.1:5000")
     mlflow.set_experiment("Modele_MLOPS")   # Définir un nom d'expérience
 
     # Entraîner les modèles et comparer les performances

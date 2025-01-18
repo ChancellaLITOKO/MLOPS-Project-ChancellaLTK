@@ -4,6 +4,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from projet_mlops_chancella import load_data, prepare_data  # Import des fonctions existantes
 from modele import train_random_forest  # Importer la fonction pour entraîner le modèle Random Forest
+import mlflow
+
+
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
+
 
 # Charger et préparer les données
 data = load_data()
