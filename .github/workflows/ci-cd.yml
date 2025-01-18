@@ -34,13 +34,18 @@ jobs:
           --default-artifact-root ./artifacts \
           --host 127.0.0.1 \
           --port 5000 &
+        sleep 10  # Donne du temps au serveur pour démarrer
+
+    - name: Verify MLflow Server is Running
+      run: |
+        curl -f http://127.0.0.1:5000/api/2.0/mlflow/ || exit 1
 
     - name: Run Tests
       run: |
         export PATH="$HOME/.local/bin:$PATH"
         poetry run pytest tests/
 
-        
+
   deploy:
     needs: build
     runs-on: ubuntu-22.04
