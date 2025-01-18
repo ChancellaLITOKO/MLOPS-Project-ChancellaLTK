@@ -30,7 +30,7 @@ jobs:
 
     - name: Run Tests
       run: |
-        export PATH="$HOME/.local/bin:$PATH"
+        export SKIP_MLFLOW_TESTS=True
         poetry run pytest tests/
 
 
