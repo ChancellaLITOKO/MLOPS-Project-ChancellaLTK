@@ -29,11 +29,18 @@ jobs:
 
     - name: Start MLflow Server
       run: |
-        nohup mlflow server --backend-store-uri sqlite:///mlflow.db --host 127.0.0.1 --port 5000 &
-        
-    - name: Run Tests
-      run: poetry run pytest tests/
+        nohup mlflow server \
+          --backend-store-uri sqlite:///mlflow.db \
+          --default-artifact-root ./artifacts \
+          --host 127.0.0.1 \
+          --port 5000 &
 
+    - name: Run Tests
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        poetry run pytest tests/
+
+        
   deploy:
     needs: build
     runs-on: ubuntu-22.04
