@@ -9,7 +9,7 @@ DISABLE_MLFLOW = os.getenv("DISABLE_MLFLOW", "False").lower() == "true"
 
 if not DISABLE_MLFLOW:
     mlflow.set_tracking_uri("http://127.0.0.1:5000")
-    model_uri = "runs:/12aa7debbc504cef8cd65a6625e7dc89/RandomForest"
+    model_uri = "runs:/3921817221e0442cb625795646127f3c/RandomForest"
     model = mlflow.pyfunc.load_model(model_uri)
     mlflow.set_experiment("House Price Prediction Experiment")
 else:

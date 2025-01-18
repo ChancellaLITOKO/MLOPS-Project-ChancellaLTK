@@ -94,7 +94,7 @@ def train_gradient_boosting(X_train, X_test, y_train, y_test):
 
 if __name__ == "__main__":
     # Configurer MLflow
-    mlflow.set_experiment("Projet_MLOps_Chancella")   # Définir un nom d'expérience
+    mlflow.set_experiment("Modele_MLOPS")   # Définir un nom d'expérience
 
     # Entraîner les modèles et comparer les performances
     results = []

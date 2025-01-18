@@ -1,9 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
-import os
 import sys
+import os
 
-# Add the src directory to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from src.api import app
 
