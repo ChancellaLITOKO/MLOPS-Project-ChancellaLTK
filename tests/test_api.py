@@ -1,22 +1,22 @@
 from fastapi.testclient import TestClient
-from unittest.mock import patch
 import sys
 import os
+import mlflow
 
-# Ajout du chemin pour inclure le répertoire `src`
+# Add the src directory to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from src.api import app  # Import de l'application FastAPI
+from src.api import app  # Import the FastAPI app
 
 client = TestClient(app)
 
-# Test pour le point d'entrée racine "/"
+# Test for the root endpoint
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"message": "Bienvenue sur l'API de prédiction du prix des maisons en Californie."}
 
-# Test pour le point d'entrée "/predict/"
+# Test for the predict endpoint
 def test_predict():
     payload = {
         "MedInc": 5.5,
@@ -32,20 +32,25 @@ def test_predict():
     assert response.status_code == 200
     assert "prediction" in response.json()
 
-# Test pour mocker MLflow
-@patch("mlflow.get_run")
-def test_mlflow_mocked_run(mock_get_run):
-    # Définir le retour de la fonction mockée
-    mock_get_run.return_value = {
-        "info": {"run_id": "12345"},
-        "data": {"metrics": {"rmse": 0.5}}
-    }
+# Test to verify MLflow integration
+def test_mlflow_integration():
+    # Ensure MLflow is tracking to the expected server
+    mlflow.set_tracking_uri("http://127.0.0.1:5000")
 
-    # Simulez un appel à la fonction MLflow mockée
-    result = mock_get_run("12345")
-    
-    # Assertions pour vérifier le comportement attendu
-    assert result["info"]["run_id"] == "12345"
-    assert "metrics" in result["data"]
-    assert result["data"]["metrics"]["rmse"] == 0.5
+    # Start an MLflow run
+    with mlflow.start_run():
+        run_id = mlflow.active_run().info.run_id
+
+        # Log a metric, parameter, and artifact to the MLflow server
+        mlflow.log_param("test_param", "value")
+        mlflow.log_metric("test_metric", 1.23)
+
+        # Ensure the run ID is valid
+        assert run_id is not None
+
+    # Verify the run exists on the MLflow server
+    run_data = mlflow.get_run(run_id)
+    assert run_data.info.run_id == run_id
+    assert run_data.data.metrics["test_metric"] == 1.23
+    assert run_data.data.params["test_param"] == "value"
 
