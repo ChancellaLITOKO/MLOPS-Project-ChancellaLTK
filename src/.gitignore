@@ -1,0 +1,10 @@
+src/mlartifacts/**/*.pkl
+__pycache__/
+*.pyc
+*.pyo
+mlruns/
+.env
+*.log
+.DS_Store
+.vscode/
+*.sqlite
