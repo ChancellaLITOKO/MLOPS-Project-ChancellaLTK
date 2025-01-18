@@ -35,11 +35,17 @@ def test_predict():
 # Test pour mocker MLflow
 @patch("mlflow.get_run")
 def test_mlflow_mocked_run(mock_get_run):
+    # Définir le retour de la fonction mockée
     mock_get_run.return_value = {
         "info": {"run_id": "12345"},
         "data": {"metrics": {"rmse": 0.5}}
     }
-    # Simulez un appel à MLflow ou ajoutez votre logique ici
+
+    # Simulez un appel à la fonction MLflow mockée
     result = mock_get_run("12345")
+    
+    # Assertions pour vérifier le comportement attendu
     assert result["info"]["run_id"] == "12345"
     assert "metrics" in result["data"]
+    assert result["data"]["metrics"]["rmse"] == 0.5
+
