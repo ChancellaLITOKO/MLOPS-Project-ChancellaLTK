@@ -30,7 +30,7 @@ jobs:
 
     - name: Run Tests
       run: |
-        export SKIP_MLFLOW_TESTS=True
+        export DISABLE_MLFLOW=True
         poetry run pytest tests/
 
 
